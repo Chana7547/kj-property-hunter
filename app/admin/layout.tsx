@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabase'
-import './admin.css'
 
 const menu = [
   { href: '/admin/dashboard', label: 'ภาพรวม' },
@@ -81,7 +80,6 @@ export default function AdminLayout({
       <aside className="admin-sidebar">
         <div className="admin-sidebar-brand">
           <div className="admin-sidebar-logo">KJ</div>
-
           <div>
             <strong>KJ Property Hunter</strong>
             <span>ระบบจัดการหลังบ้าน</span>
@@ -170,9 +168,13 @@ export default function AdminLayout({
         }
 
         .admin-sidebar-brand strong,
-        .admin-sidebar-brand span { display: block; }
+        .admin-sidebar-brand span {
+          display: block;
+        }
 
-        .admin-sidebar-brand strong { font-size: 13px; }
+        .admin-sidebar-brand strong {
+          font-size: 13px;
+        }
 
         .admin-sidebar-brand span {
           margin-top: 3px;
@@ -190,7 +192,6 @@ export default function AdminLayout({
           color: #9ca3af;
           font-size: 9px;
           font-weight: 800;
-          letter-spacing: 0.5px;
         }
 
         .admin-sidebar-link {
@@ -248,7 +249,9 @@ export default function AdminLayout({
           color: #4b5563;
         }
 
-        .admin-main { min-width: 0; }
+        .admin-main {
+          min-width: 0;
+        }
 
         .admin-content {
           width: 100%;
@@ -265,18 +268,38 @@ export default function AdminLayout({
         }
 
         @media (max-width: 820px) {
-          .admin-shell { grid-template-columns: 1fr; }
-          .admin-sidebar { position: static; height: auto; }
+          .admin-shell {
+            grid-template-columns: 1fr;
+          }
+
+          .admin-sidebar {
+            position: static;
+            height: auto;
+          }
+
           .admin-sidebar-nav {
             display: flex;
             gap: 6px;
             overflow-x: auto;
             padding: 10px 12px;
           }
-          .admin-sidebar-section { display: none; }
-          .admin-sidebar-link { flex: 0 0 auto; margin: 0; }
-          .admin-sidebar-bottom { display: none; }
-          .admin-content { padding: 18px 14px; }
+
+          .admin-sidebar-section {
+            display: none;
+          }
+
+          .admin-sidebar-link {
+            flex: 0 0 auto;
+            margin: 0;
+          }
+
+          .admin-sidebar-bottom {
+            display: none;
+          }
+
+          .admin-content {
+            padding: 18px 14px;
+          }
         }
       `}</style>
     </div>
