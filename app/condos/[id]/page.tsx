@@ -371,6 +371,7 @@ export default function CondoDetailPage() {
           display: grid;
           grid-template-columns: minmax(0, 2fr) minmax(280px, 0.8fr);
           gap: 10px;
+          height: clamp(440px, 52vw, 620px);
         }
 
         .kj-detail-gallery-main,
@@ -380,14 +381,28 @@ export default function CondoDetailPage() {
           background: #ded9d0;
         }
 
-        .kj-detail-gallery-main { aspect-ratio: 16 / 9; }
-
-        .kj-detail-gallery-side {
-          display: grid;
-          gap: 10px;
+        .kj-detail-gallery-main {
+          min-width: 0;
+          height: 100%;
         }
 
-        .kj-detail-gallery-side > div { min-height: 0; }
+        .kj-detail-gallery-side {
+          min-width: 0;
+          min-height: 0;
+          display: grid;
+          grid-template-rows: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          height: 100%;
+        }
+
+        .kj-detail-gallery-side > div {
+          min-height: 0;
+          height: 100%;
+        }
+
+        .kj-detail-gallery-side > div:only-child {
+          grid-row: 1 / -1;
+        }
 
         .kj-detail-gallery-main img,
         .kj-detail-gallery-side img {
@@ -598,13 +613,32 @@ export default function CondoDetailPage() {
         }
 
         @media (max-width: 980px) {
-          .kj-detail-gallery { grid-template-columns: 1fr; }
+          .kj-detail-gallery {
+            grid-template-columns: 1fr;
+            height: auto;
+          }
+
+          .kj-detail-gallery-main {
+            height: auto;
+            aspect-ratio: 16 / 10;
+          }
 
           .kj-detail-gallery-side {
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: none;
+            height: auto;
           }
 
-          .kj-detail-gallery-side > div { aspect-ratio: 4 / 3; }
+          .kj-detail-gallery-side > div {
+            height: auto;
+            aspect-ratio: 4 / 3;
+          }
+
+          .kj-detail-gallery-side > div:only-child {
+            grid-row: auto;
+            grid-column: 1 / -1;
+            aspect-ratio: 16 / 8;
+          }
           .kj-detail-main { grid-template-columns: 1fr; }
           .kj-detail-sidebar { position: static; }
         }
@@ -624,7 +658,10 @@ export default function CondoDetailPage() {
 
           .kj-detail-price { text-align: left; }
           .kj-detail-heading h1 { font-size: 42px; }
-          .kj-detail-gallery-main { aspect-ratio: 4 / 3; }
+          .kj-detail-gallery-main {
+            height: auto;
+            aspect-ratio: 4 / 3;
+          }
 
           .kj-detail-specs {
             grid-template-columns: repeat(2, minmax(0, 1fr));
