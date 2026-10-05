@@ -44,7 +44,6 @@ export default function CondoDetailPage() {
           .select('*')
           .eq('id', id)
           .maybeSingle(),
-
         supabase
           .from('public_property_images')
           .select('id,property_id,image_url,sort_order')
@@ -61,20 +60,14 @@ export default function CondoDetailPage() {
   }, [id])
 
   if (loading) {
-    return (
-      <main className="state">
-        <div>Preparing residence...</div>
-      </main>
-    )
+    return <main className="kj-state">กำลังโหลดข้อมูลห้อง...</main>
   }
 
   if (!property) {
     return (
-      <main className="state">
-        <h1>Residence not found</h1>
-        <Link className="back-btn" href="/">
-          Back to collection
-        </Link>
+      <main className="kj-state">
+        <h1>ไม่พบห้องนี้</h1>
+        <Link href="/" className="kj-back-btn">กลับหน้าแรก</Link>
       </main>
     )
   }
@@ -82,60 +75,57 @@ export default function CondoDetailPage() {
   const title = property.public_title || property.project_name
 
   return (
-    <main className="detail-site">
-      <header className="detail-header">
-        <div className="container header-inner">
-          <Link href="/" className="brand">
-            <span className="brand-mark">KJ</span>
-
-            <span className="brand-copy">
+    <main className="kj-detail">
+      <header className="kj-detail-header">
+        <div className="kj-detail-container kj-detail-header-inner">
+          <Link href="/" className="kj-detail-brand">
+            <span className="kj-detail-brand-mark">KJ</span>
+            <span className="kj-detail-brand-copy">
               <b>PROPERTY HUNTER</b>
-              <small>BANGKOK RESIDENCE SPECIALIST</small>
+              <small>BANGKOK CONDO RENTAL</small>
             </span>
           </Link>
 
-          <nav className="nav">
-            <Link href="/">Collection</Link>
-            <a href="#enquiry" className="nav-cta">
-              Private Enquiry
-            </a>
+          <nav className="kj-detail-nav">
+            <Link href="/">หน้าหลัก</Link>
+            <a href="#enquiry" className="kj-detail-nav-cta">นัดชมห้อง</a>
           </nav>
         </div>
       </header>
 
-      <section className="intro container">
-        <div className="breadcrumb">
-          <Link href="/">COLLECTION</Link>
+      <section className="kj-detail-container kj-detail-top">
+        <div className="kj-detail-breadcrumb">
+          <Link href="/">HOME</Link>
           <span>/</span>
           <span>{property.project_name}</span>
         </div>
 
-        <div className="title-row">
+        <div className="kj-detail-heading">
           <div>
-            <div className="eyebrow">
-              {property.district || 'BANGKOK'} · FOR RENT
-            </div>
-
+            <span className="kj-detail-kicker">
+              {property.district || 'Bangkok'} · FOR RENT
+            </span>
             <h1>{title}</h1>
+            <p>{property.project_name}</p>
           </div>
 
-          <div className="price">
-            <small>MONTHLY RENT</small>
+          <div className="kj-detail-price">
+            <span>ค่าเช่าต่อเดือน</span>
             <strong>{money(property.asking_rent)}</strong>
           </div>
         </div>
       </section>
 
-      <section className="gallery container">
-        <div className="gallery-main">
+      <section className="kj-detail-container kj-detail-gallery">
+        <div className="kj-detail-gallery-main">
           {images[0] ? (
             <img src={images[0].image_url} alt={title} />
           ) : (
-            <div className="placeholder">KJ</div>
+            <div className="kj-detail-placeholder">KJ</div>
           )}
         </div>
 
-        <div className="gallery-side">
+        <div className="kj-detail-gallery-side">
           {images.slice(1, 3).map((img) => (
             <div key={img.id}>
               <img src={img.image_url} alt={title} />
@@ -144,55 +134,55 @@ export default function CondoDetailPage() {
         </div>
       </section>
 
-      <section className="body container">
-        <div className="content">
-          <div className="spec-grid">
-            <Spec label="BEDROOMS" value={property.bedroom ?? '-'} />
-            <Spec label="BATHROOMS" value={property.bathroom ?? '-'} />
-            <Spec
-              label="AREA"
-              value={`${property.size_sqm ?? '-'} SQ.M.`}
+      <section className="kj-detail-container kj-detail-main">
+        <div className="kj-detail-left">
+          <div className="kj-detail-specs">
+            <InfoBox
+              label="BEDROOM"
+              value={property.bedroom === 0 ? 'Studio' : String(property.bedroom ?? '-')}
             />
-            <Spec label="FLOOR" value={property.floor || '-'} />
+            <InfoBox label="BATHROOM" value={String(property.bathroom ?? '-')} />
+            <InfoBox label="SIZE" value={`${property.size_sqm ?? '-'} ตร.ม.`} />
+            <InfoBox label="FLOOR" value={property.floor || '-'} />
           </div>
 
-          <section className="overview">
-            <div className="section-head">
-              <span className="eyebrow">THE RESIDENCE</span>
+          <section className="kj-detail-card kj-detail-description">
+            <div className="kj-detail-section-title">
+              <span>OVERVIEW</span>
               <h2>รายละเอียดห้อง</h2>
             </div>
 
-            <p>
+            <div className="kj-detail-description-text">
               {property.public_description ||
-                'สอบถามรายละเอียดเพิ่มเติมกับ Private Property Advisor ของเรา'}
-            </p>
+                'สอบถามรายละเอียดเพิ่มเติมกับ KJ Property Hunter'}
+            </div>
           </section>
 
-          <section className="facts">
-            <Fact label="PROJECT" value={property.project_name} />
-            <Fact
-              label="LOCATION"
-              value={property.district || 'Bangkok'}
-            />
-            <Fact
-              label="AVAILABLE"
-              value={
-                property.available_date
-                  ? formatDate(property.available_date)
-                  : 'On request'
-              }
-            />
-            <Fact label="STATUS" value="Available for rent" />
+          <section className="kj-detail-card">
+            <div className="kj-detail-section-title">
+              <span>PROPERTY INFORMATION</span>
+              <h2>ข้อมูลเพิ่มเติม</h2>
+            </div>
+
+            <div className="kj-detail-facts">
+              <FactRow label="โครงการ" value={property.project_name} />
+              <FactRow label="ทำเล" value={property.district || 'Bangkok'} />
+              <FactRow
+                label="พร้อมเข้าอยู่"
+                value={property.available_date ? formatDate(property.available_date) : 'สอบถาม'}
+              />
+              <FactRow label="สถานะ" value="พร้อมเช่า" />
+            </div>
           </section>
 
           {images.length > 3 && (
-            <section className="more-photos">
-              <div className="section-head">
-                <span className="eyebrow">GALLERY</span>
+            <section className="kj-detail-card">
+              <div className="kj-detail-section-title">
+                <span>GALLERY</span>
                 <h2>รูปเพิ่มเติม</h2>
               </div>
 
-              <div className="photo-grid">
+              <div className="kj-detail-photo-grid">
                 {images.slice(3).map((img) => (
                   <img
                     key={img.id}
@@ -206,538 +196,460 @@ export default function CondoDetailPage() {
           )}
         </div>
 
-        <aside id="enquiry" className="enquiry-column">
-          <div className="advisor-card">
-            <div className="eyebrow light">
-              PRIVATE PROPERTY ADVISOR
-            </div>
-
-            <h3>
-              ข้าว <em>· Khaw</em>
-            </h3>
-
-            <p>
-              Personal assistance for viewing, negotiation and move-in.
-            </p>
-
-            <a href="tel:0636575256">
-              CALL · 063-657-5256
-            </a>
-
-            <div className="advisor-line">
-              LINE · Chanaakrn7547.
-            </div>
+        <aside id="enquiry" className="kj-detail-sidebar">
+          <div className="kj-detail-agent-card">
+            <span className="kj-detail-agent-kicker">PRIVATE PROPERTY ADVISOR</span>
+            <h3>ข้าว <em>· Khaw</em></h3>
+            <p>ดูแลการนัดชม ต่อรอง และประสานงานจนถึงวันเข้าอยู่</p>
+            <a href="tel:0636575256">โทร · 063-657-5256</a>
+            <div className="kj-detail-agent-line">LINE · Chanaakrn7547.</div>
           </div>
 
-          <LeadForm
-            propertyId={property.id}
-            projectName={property.project_name}
-          />
+          <div className="kj-detail-lead-wrap">
+            <LeadForm
+              propertyId={property.id}
+              projectName={property.project_name}
+            />
+          </div>
         </aside>
       </section>
 
       <style jsx global>{`
-        html {
-          scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; background: #f6f4ef; color: #1f1f1d; }
+        * { box-sizing: border-box; }
 
-        body {
-          margin: 0;
-          background: #f6f3ec;
-          color: #1b1b18;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-
-      <style jsx>{`
-        .detail-site {
+        .kj-detail {
           min-height: 100vh;
-          background: #f6f3ec;
-          color: #1b1b18;
-          font-family: Inter, "Noto Sans Thai", "Segoe UI", sans-serif;
+          background: #f6f4ef;
+          color: #1f1f1d;
+          font-family: Arial, "Noto Sans Thai", sans-serif;
         }
 
-        .container {
-          width: min(1180px, calc(100% - 48px));
+        .kj-detail-container {
+          width: min(1180px, calc(100% - 40px));
           margin: 0 auto;
         }
 
-        .detail-header {
+        .kj-detail-header {
           position: sticky;
           top: 0;
-          z-index: 40;
-          background: rgba(246, 243, 236, 0.94);
-          border-bottom: 1px solid rgba(27, 27, 24, 0.08);
-          backdrop-filter: blur(16px);
+          z-index: 50;
+          background: rgba(255, 255, 255, 0.95);
+          border-bottom: 1px solid #e7e3dc;
+          backdrop-filter: blur(12px);
         }
 
-        .header-inner {
-          min-height: 76px;
+        .kj-detail-header-inner {
+          min-height: 70px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 20px;
         }
 
-        .brand {
+        .kj-detail-brand {
           display: inline-flex;
           align-items: center;
           gap: 12px;
-          color: inherit;
+          color: #1f1f1d;
           text-decoration: none;
         }
 
-        .brand-mark {
+        .kj-detail-brand-mark {
           font-family: Georgia, serif;
           font-size: 30px;
           line-height: 1;
         }
 
-        .brand-copy b,
-        .brand-copy small {
+        .kj-detail-brand-copy b,
+        .kj-detail-brand-copy small {
           display: block;
         }
 
-        .brand-copy b {
+        .kj-detail-brand-copy b {
           font-size: 11px;
-          letter-spacing: 1.6px;
+          letter-spacing: 1.5px;
         }
 
-        .brand-copy small {
+        .kj-detail-brand-copy small {
           margin-top: 3px;
-          color: #7c766d;
+          color: #817b71;
           font-size: 8px;
-          letter-spacing: 1.2px;
+          letter-spacing: 1px;
         }
 
-        .nav {
+        .kj-detail-nav {
           display: flex;
           align-items: center;
           gap: 18px;
         }
 
-        .nav a {
-          color: #403d37;
+        .kj-detail-nav a {
+          color: #413f3a;
           text-decoration: none;
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
         }
 
-        .nav-cta {
-          padding: 11px 15px;
-          border-radius: 999px;
-          background: #1b1b18;
+        .kj-detail-nav-cta {
+          padding: 11px 16px;
+          border-radius: 8px;
+          background: #1f1f1d;
           color: #fff !important;
         }
 
-        .intro {
-          padding: 34px 0 26px;
-        }
+        .kj-detail-top { padding: 30px 0 24px; }
 
-        .breadcrumb {
+        .kj-detail-breadcrumb {
           display: flex;
-          gap: 9px;
+          gap: 8px;
           align-items: center;
-          color: #8a8175;
-          font-size: 9px;
-          letter-spacing: 1.2px;
+          color: #8a847a;
+          font-size: 10px;
+          letter-spacing: 0.8px;
         }
 
-        .breadcrumb a {
+        .kj-detail-breadcrumb a {
           color: inherit;
           text-decoration: none;
         }
 
-        .title-row {
+        .kj-detail-heading {
           display: flex;
           justify-content: space-between;
-          align-items: end;
+          align-items: flex-end;
           gap: 30px;
           margin-top: 18px;
         }
 
-        .eyebrow {
-          color: #8a8175;
+        .kj-detail-kicker {
+          color: #8c7b63;
           font-size: 9px;
           font-weight: 800;
-          letter-spacing: 1.8px;
+          letter-spacing: 1.4px;
         }
 
-        .eyebrow.light {
-          color: #cfc6b8;
-        }
-
-        .title-row h1 {
-          margin: 9px 0 0;
+        .kj-detail-heading h1 {
+          margin: 8px 0 0;
           max-width: 760px;
           font-family: Georgia, "Times New Roman", serif;
-          font-size: clamp(40px, 5vw, 68px);
-          line-height: 1;
+          font-size: clamp(38px, 5vw, 64px);
+          line-height: 1.02;
           font-weight: 400;
-          letter-spacing: -2px;
+          letter-spacing: -1.5px;
         }
 
-        .price {
+        .kj-detail-heading p {
+          margin: 8px 0 0;
+          color: #767066;
+          font-size: 13px;
+        }
+
+        .kj-detail-price {
           flex: 0 0 auto;
           text-align: right;
         }
 
-        .price small,
-        .price strong {
+        .kj-detail-price span,
+        .kj-detail-price strong {
           display: block;
         }
 
-        .price small {
-          color: #8a8175;
-          font-size: 8px;
-          letter-spacing: 1.4px;
+        .kj-detail-price span {
+          color: #8c8478;
+          font-size: 9px;
+          font-weight: 700;
         }
 
-        .price strong {
-          margin-top: 8px;
-          font-size: 18px;
+        .kj-detail-price strong {
+          margin-top: 7px;
+          font-size: 22px;
         }
 
-        .gallery {
+        .kj-detail-gallery {
           display: grid;
-          grid-template-columns: minmax(0, 2fr) minmax(280px, 0.85fr);
+          grid-template-columns: minmax(0, 2fr) minmax(280px, 0.8fr);
           gap: 10px;
         }
 
-        .gallery-main,
-        .gallery-side > div {
+        .kj-detail-gallery-main,
+        .kj-detail-gallery-side > div {
           overflow: hidden;
-          border-radius: 10px;
-          background: #ddd8cf;
+          border-radius: 12px;
+          background: #ded9d0;
         }
 
-        .gallery-main {
-          aspect-ratio: 16 / 10;
-        }
+        .kj-detail-gallery-main { aspect-ratio: 16 / 9; }
 
-        .gallery-side {
+        .kj-detail-gallery-side {
           display: grid;
           gap: 10px;
         }
 
-        .gallery-side > div {
-          min-height: 0;
-        }
+        .kj-detail-gallery-side > div { min-height: 0; }
 
-        .gallery-main img,
-        .gallery-side img {
+        .kj-detail-gallery-main img,
+        .kj-detail-gallery-side img {
           width: 100%;
           height: 100%;
           display: block;
           object-fit: cover;
         }
 
-        .placeholder {
+        .kj-detail-placeholder {
           width: 100%;
           height: 100%;
-          min-height: 380px;
+          min-height: 420px;
           display: grid;
           place-items: center;
-          color: #847b6d;
           font-family: Georgia, serif;
-          font-size: 50px;
+          font-size: 52px;
+          color: #8a8174;
         }
 
-        .body {
+        .kj-detail-main {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) 380px;
-          gap: 42px;
+          grid-template-columns: minmax(0, 1fr) 360px;
+          gap: 28px;
           align-items: start;
-          padding: 34px 0 90px;
+          padding: 28px 0 80px;
         }
 
-        .content {
-          min-width: 0;
-        }
+        .kj-detail-left { min-width: 0; }
 
-        .spec-grid {
+        .kj-detail-specs {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
-          border: 1px solid #ddd7ce;
-          border-radius: 10px;
-          background: #fff;
-          overflow: hidden;
+          gap: 10px;
+          margin-bottom: 18px;
         }
 
-        .spec {
+        .kj-detail-info-box {
           min-height: 92px;
           padding: 18px;
-          border-right: 1px solid #e7e2da;
+          border: 1px solid #e5e0d8;
+          border-radius: 10px;
+          background: #fff;
         }
 
-        .spec:last-child {
-          border-right: 0;
-        }
-
-        .spec small,
-        .spec strong {
+        .kj-detail-info-box span,
+        .kj-detail-info-box strong {
           display: block;
         }
 
-        .spec small {
-          color: #968c7d;
+        .kj-detail-info-box span {
+          color: #8d8578;
           font-size: 8px;
-          letter-spacing: 1.3px;
+          font-weight: 800;
+          letter-spacing: 1.2px;
         }
 
-        .spec strong {
+        .kj-detail-info-box strong {
           margin-top: 11px;
           font-family: Georgia, serif;
-          font-size: 24px;
+          font-size: 23px;
           font-weight: 400;
         }
 
-        .overview,
-        .facts,
-        .more-photos {
-          margin-top: 22px;
-          border: 1px solid #e0dbd2;
-          border-radius: 10px;
+        .kj-detail-card {
+          margin-top: 16px;
+          padding: 24px;
+          border: 1px solid #e5e0d8;
+          border-radius: 12px;
           background: #fff;
         }
 
-        .overview {
-          padding: 28px;
+        .kj-detail-section-title span {
+          color: #8b8276;
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 1.2px;
         }
 
-        .section-head h2 {
+        .kj-detail-section-title h2 {
           margin: 7px 0 0;
           font-family: Georgia, serif;
-          font-size: 32px;
+          font-size: 30px;
           font-weight: 400;
         }
 
-        .overview p {
-          margin: 22px 0 0;
-          color: #5f5a53;
+        .kj-detail-description-text {
+          margin-top: 20px;
+          color: #57534d;
           font-size: 14px;
           line-height: 1.9;
           white-space: pre-line;
         }
 
-        .facts {
-          overflow: hidden;
+        .kj-detail-facts {
+          margin-top: 18px;
+          border-top: 1px solid #eee9e2;
         }
 
-        .fact {
+        .kj-detail-fact-row {
           display: flex;
           justify-content: space-between;
           gap: 20px;
-          padding: 16px 18px;
+          padding: 14px 0;
           border-bottom: 1px solid #eee9e2;
         }
 
-        .fact:last-child {
-          border-bottom: 0;
+        .kj-detail-fact-row span {
+          color: #8c8479;
+          font-size: 10px;
         }
 
-        .fact span {
-          color: #968c7d;
-          font-size: 8px;
-          letter-spacing: 1.1px;
-        }
-
-        .fact strong {
+        .kj-detail-fact-row strong {
           text-align: right;
           font-size: 12px;
         }
 
-        .more-photos {
-          padding: 22px;
-        }
-
-        .photo-grid {
+        .kj-detail-photo-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 10px;
           margin-top: 18px;
         }
 
-        .photo-grid img {
+        .kj-detail-photo-grid img {
           width: 100%;
           aspect-ratio: 4 / 3;
+          display: block;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: 9px;
         }
 
-        .enquiry-column {
+        .kj-detail-sidebar {
           position: sticky;
-          top: 96px;
+          top: 90px;
           display: grid;
-          gap: 16px;
+          gap: 14px;
         }
 
-        .advisor-card {
-          padding: 28px;
-          border-radius: 10px;
-          background: #1c1b18;
+        .kj-detail-agent-card {
+          padding: 24px;
+          border-radius: 12px;
+          background: #1d1d1a;
           color: #fff;
         }
 
-        .advisor-card h3 {
+        .kj-detail-agent-kicker {
+          color: #c7baa6;
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 1.2px;
+        }
+
+        .kj-detail-agent-card h3 {
           margin: 14px 0 0;
           font-family: Georgia, serif;
-          font-size: 32px;
+          font-size: 30px;
           font-weight: 400;
         }
 
-        .advisor-card h3 em {
-          color: #c9baa4;
-          font-size: 16px;
+        .kj-detail-agent-card h3 em {
+          color: #c7baa6;
+          font-size: 15px;
           font-weight: 400;
         }
 
-        .advisor-card p {
-          margin: 18px 0;
-          color: #c9c2b7;
+        .kj-detail-agent-card p {
+          margin: 16px 0;
+          color: #c9c4bb;
           font-size: 12px;
           line-height: 1.7;
         }
 
-        .advisor-card a,
-        .advisor-line {
+        .kj-detail-agent-card a,
+        .kj-detail-agent-line {
           display: block;
-          padding: 14px 0;
+          padding: 13px 0;
           border-top: 1px solid rgba(255,255,255,.12);
           color: #fff;
           text-decoration: none;
           font-size: 10px;
           font-weight: 700;
-          letter-spacing: .5px;
         }
 
-        .state {
+        .kj-detail-lead-wrap {
+          overflow: hidden;
+          border: 1px solid #e5e0d8;
+          border-radius: 12px;
+          background: #fff;
+        }
+
+        .kj-state {
           min-height: 100vh;
           display: grid;
           place-items: center;
           align-content: center;
           gap: 18px;
-          background: #f6f3ec;
-          color: #1b1b18;
+          background: #f6f4ef;
+          color: #1f1f1d;
         }
 
-        .state h1 {
-          margin: 0;
-          font-family: Georgia, serif;
-          font-weight: 400;
-        }
-
-        .back-btn {
-          padding: 12px 16px;
+        .kj-back-btn {
+          padding: 11px 14px;
           border-radius: 8px;
-          background: #1b1b18;
+          background: #1f1f1d;
           color: #fff;
           text-decoration: none;
-          font-size: 12px;
-          font-weight: 700;
         }
 
         @media (max-width: 980px) {
-          .gallery {
-            grid-template-columns: 1fr;
-          }
+          .kj-detail-gallery { grid-template-columns: 1fr; }
 
-          .gallery-side {
+          .kj-detail-gallery-side {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
-          .gallery-side > div {
-            aspect-ratio: 4 / 3;
-          }
-
-          .body {
-            grid-template-columns: 1fr;
-          }
-
-          .enquiry-column {
-            position: static;
-          }
+          .kj-detail-gallery-side > div { aspect-ratio: 4 / 3; }
+          .kj-detail-main { grid-template-columns: 1fr; }
+          .kj-detail-sidebar { position: static; }
         }
 
-        @media (max-width: 720px) {
-          .container {
-            width: calc(100% - 28px);
-          }
+        @media (max-width: 700px) {
+          .kj-detail-container { width: calc(100% - 28px); }
 
-          .brand-copy small,
-          .nav > a:first-child {
+          .kj-detail-brand-copy small,
+          .kj-detail-nav > a:first-child {
             display: none;
           }
 
-          .title-row {
+          .kj-detail-heading {
             align-items: flex-start;
             flex-direction: column;
           }
 
-          .price {
-            text-align: left;
-          }
+          .kj-detail-price { text-align: left; }
+          .kj-detail-heading h1 { font-size: 42px; }
+          .kj-detail-gallery-main { aspect-ratio: 4 / 3; }
 
-          .title-row h1 {
-            font-size: 44px;
-          }
-
-          .gallery-main {
-            aspect-ratio: 4 / 3;
-          }
-
-          .spec-grid {
+          .kj-detail-specs {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
-          .spec:nth-child(2) {
-            border-right: 0;
-          }
-
-          .spec:nth-child(-n+2) {
-            border-bottom: 1px solid #e7e2da;
-          }
-
-          .overview {
-            padding: 22px;
-          }
-
-          .photo-grid {
-            grid-template-columns: 1fr;
-          }
+          .kj-detail-card { padding: 20px; }
+          .kj-detail-photo-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </main>
   )
 }
 
-function Spec({
-  label,
-  value,
-}: {
-  label: string
-  value: string | number
-}) {
+function InfoBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="spec">
-      <small>{label}</small>
+    <div className="kj-detail-info-box">
+      <span>{label}</span>
       <strong>{value}</strong>
     </div>
   )
 }
 
-function Fact({
-  label,
-  value,
-}: {
-  label: string
-  value: string
-}) {
+function FactRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="fact">
+    <div className="kj-detail-fact-row">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
@@ -746,8 +658,8 @@ function Fact({
 
 function money(value: number | null) {
   return value === null
-    ? 'Price on request'
-    : `฿${new Intl.NumberFormat('th-TH').format(value)} / month`
+    ? 'สอบถามราคา'
+    : `฿${new Intl.NumberFormat('th-TH').format(value)} / เดือน`
 }
 
 function formatDate(value: string) {
